@@ -62,7 +62,28 @@ The Boolean model in Information Retrieval (IR) is a fundamental model used for 
         print(list(self.index.keys()))
 
     def boolean_search(self, query):
-        # TYPE YOUR CODE HERE
+        query = query.lower()
+        query_terms = query.split()
+        result = None
+
+        if query_terms[0] == "not":
+            term = query_terms[1]
+            all_docs = set(range(1, len(self.documents_matrix) + 1))
+
+            if term in self.index:
+                return all_docs.difference(self.index[term])
+            return all_docs
+
+        for term in query_terms:
+            if term in self.index:
+                if result is None:
+                    result = self.index[term]
+                else:
+                    if query_terms[1] == "and":
+                        result = result.intersection(self.index[term])
+                    elif query_terms[1] == "or":
+                        result = result.union(self.index[term])
+        return result
 
 if __name__ == "__main__":
     indexer = BooleanRetrieval()
@@ -89,5 +110,9 @@ if __name__ == "__main__":
 
 
 ### Output:
+<img width="1490" height="371" alt="output1" src="https://github.com/user-attachments/assets/fae02a46-6813-423b-a4e5-6935249ab54e" />
+<img width="422" height="48" alt="output2" src="https://github.com/user-attachments/assets/7c809d14-14c8-4cb8-b39f-641a863b6f46" />
+<img width="504" height="52" alt="output3" src="https://github.com/user-attachments/assets/a5791c9b-e777-4a23-ad22-7eb44ac538d6" />
 
 ### Result:
+Thus, the Boolean Information Retrieval model was successfully implemented in Python to index documents and retrieve relevant results using Boolean operators (AND, OR, NOT) based on user queries.
